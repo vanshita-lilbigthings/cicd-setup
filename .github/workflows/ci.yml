@@ -75,6 +75,13 @@ jobs:
       - name: Run tests
         run: npm test -- --forceExit
 
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          fail_ci_if_error: true
+
   # ─────────────────────────────────────────
   # JOB 4: Secret Scanning
   # ─────────────────────────────────────────
