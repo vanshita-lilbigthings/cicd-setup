@@ -44,4 +44,19 @@ describe('Users API', () => {
     const res = await request(app).post('/users').send({ name: 'No Email' });
     expect(res.statusCode).toBe(400);
   });
+
+  it('POST /users should return 400 for invalid email format', async () => {
+    const res = await request(app)
+      .post('/users')
+      .send({ name: 'Alice', email: 'not-an-email' });
+    expect(res.statusCode).toBe(400);
+    expect(res.body.error).toBe('Validation failed');
+  });
+
+  it('POST /users should return 400 for empty name', async () => {
+    const res = await request(app)
+      .post('/users')
+      .send({ name: '', email: 'test@example.com' });
+    expect(res.statusCode).toBe(400);
+  });
 });

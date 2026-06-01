@@ -1,7 +1,13 @@
 const express = require('express');
-const app = express();
+const { z } = require('zod');
 
+const app = express();
 app.use(express.json());
+
+const UserSchema = z.object({
+  name: z.string().min(1).max(100),
+  email: z.string().email(),
+});
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
@@ -29,14 +35,20 @@ app.get('/users/:id', (req, res) => {
 });
 
 app.post('/users', (req, res) => {
-  const { name, email } = req.body;
-  if (!name || !email) {
-    return res.status(400).json({ error: 'Name and email are required' });
+  const result = UserSchema.safeParse(req.body);
+  if (!result.success) {
+    return res.status(400).json({
+      error: 'Validation failed',
+      details: result.error.errors,
+    });
   }
+  const { name, email } = result.data;
   res.status(201).json({ id: 3, name, email });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
 
 module.exports = app;
