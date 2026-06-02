@@ -276,12 +276,12 @@ jobs:
 
   # ─────────────────────────────────────────
   # JOB 12: Semantic Release
-  # Runs after health check passes on main
+  # Runs after SonarCloud passes on main
   # ─────────────────────────────────────────
   release:
     name: Semantic Release
     runs-on: ubuntu-latest
-    needs: health-check-production
+    needs: sonarcloud
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
       - name: Checkout code
