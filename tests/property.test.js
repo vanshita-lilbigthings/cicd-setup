@@ -8,7 +8,9 @@ describe('Property-Based Tests', () => {
       fc.asyncProperty(
         fc.record({
           name: fc.string({ minLength: 1, maxLength: 100 }),
-          email:  fc.emailAddress({ domains: ['example.com', 'test.com', 'mail.com'] }),
+          email: fc.emailAddress({
+            domains: ['example.com', 'test.com', 'mail.com'],
+          }),
         }),
         async (user) => {
           const res = await request(app).post('/users').send(user);
