@@ -144,6 +144,9 @@ jobs:
   # ─────────────────────────────────────────
   # JOB 6: Secret Scanning
   # ─────────────────────────────────────────
+  # ─────────────────────────────────────────
+  # JOB 6: Secret Scanning
+  # ─────────────────────────────────────────
   gitleaks:
     name: Secret Scanning
     runs-on: ubuntu-latest
@@ -153,10 +156,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install Gitleaks
+        run: |
+          curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v8.18.4/gitleaks_8.18.4_linux_x64.tar.gz | tar -xz
+          sudo mv gitleaks /usr/local/bin/
+
       - name: Run Gitleaks
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gitleaks detect --source . --log-opts="HEAD~50..HEAD" -v
 
   # ─────────────────────────────────────────
   # JOB 7: SonarCloud Analysis
