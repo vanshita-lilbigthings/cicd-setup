@@ -19,7 +19,9 @@ app.use((req, res, next) => {
   logger.info(`${req.method} ${req.path}`);
   next();
 });
-
+// var x = 1 ;     
+// const y = 2  ;      
+// eval('hello') ;
 const UserSchema = z.object({
   name: z.string().min(1).max(100),
   email: z.string().email(),
